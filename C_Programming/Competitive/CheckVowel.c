@@ -1,41 +1,49 @@
 #include <stdio.h>
-
-#define TRUE 1
-#define FALSE 0
+#define True 1 
+#define False 0
 
 typedef int BOOL;
 
-BOOL ChkVowel(char ch)
+BOOL CheqVowel(char *str)
 {
-    if(ch == 'a' || ch == 'e' || ch == 'i' || ch == 'o' || ch == 'u' ||
-       ch == 'A' || ch == 'E' || ch == 'I' || ch == 'O' || ch == 'U')
+   
+    
+    while (*str!='\0')
     {
-        return TRUE;
+        if (*str=='a' || *str=='e'||*str=='i'||*str=='o'||*str=='u'||
+             *str=='A'||*str=='E'||*str=='I'||*str=='O'||*str=='U')
+        {
+           return True;
+           
+        }
+        str++;
+        
     }
-    else
-    {
-        return FALSE;
-    }
+    return False;
+    
+
 }
 
-int main()
+int main ()
 {
-    char cValue = '\0';
-    BOOL bRet = FALSE;
+    char Arr[20];
+    int bRet = False;
 
-    printf("Enter character : ");
-    scanf("%c", &cValue);
+    printf("Enter The String: ");     
+    scanf("%[^\n]",Arr);
 
-    bRet = ChkVowel(cValue);
+    bRet=CheqVowel(Arr);
 
-    if(bRet == TRUE)
-    {
-        printf("TRUE");
-    }
+   if (bRet==True)
+   {
+      printf("This String Contains the Vowels");
+   }
     else
     {
-        printf("FALSE");
+         printf("This String Can Not Contains the Vowels");
     }
+   
+
 
     return 0;
 }
