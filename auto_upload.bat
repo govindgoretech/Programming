@@ -13,6 +13,4 @@ if %errorlevel%==0 (
 git commit -m "Automatic daily update"
 git push origin main
 
-echo.
-echo Upload completed.
-pause
+exit /b 0
