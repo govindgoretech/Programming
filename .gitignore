@@ -3,6 +3,10 @@
 
 # Automation script
 auto_upload.bat
+auto_upload_backup.bat
+
+# Automation log
+auto_upload.log
 
 # Temporary files
 *_backup.c
