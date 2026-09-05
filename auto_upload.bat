@@ -10,33 +10,27 @@ set "RETRY_DELAY=300"
 echo ================================================== >> "%LOGFILE%"
 echo [%date% %time%] Auto upload started >> "%LOGFILE%"
 
-REM --------------------------------------------------
-REM Check whether script was started by Task Scheduler
-REM --------------------------------------------------
+REM Check for scheduled argument
 set "SCHEDULED_RUN=0"
 
-schtasks /query /tn "Programming GitHub Auto Upload" /fo list >nul 2>&1
-if not errorlevel 1 (
+if /I "%~1"=="/scheduled" (
     set "SCHEDULED_RUN=1"
 )
 
-REM --------------------------------------------------
-REM Random delay only for scheduled run
+REM Random delay ONLY for scheduled run
 REM 0 to 30 minutes
-REM --------------------------------------------------
 if "%SCHEDULED_RUN%"=="1" (
     set /a RANDOM_MINUTES=%RANDOM% %% 31
     set /a WAIT_SECONDS=%RANDOM_MINUTES%*60
 
+    echo Scheduled run detected.
     echo Waiting %RANDOM_MINUTES% minutes before upload...
     echo [%date% %time%] Random delay: %RANDOM_MINUTES% minutes >> "%LOGFILE%"
 
     timeout /t %WAIT_SECONDS% /nobreak >nul
 )
 
-REM --------------------------------------------------
 REM Detect changes
-REM --------------------------------------------------
 git add -A
 
 git diff --cached --quiet
@@ -49,9 +43,7 @@ if %errorlevel%==0 (
 echo Changes detected.
 echo [%date% %time%] Changes detected. >> "%LOGFILE%"
 
-REM --------------------------------------------------
-REM Commit changes
-REM --------------------------------------------------
+REM Commit
 git commit -m "Automatic daily update"
 
 if errorlevel 1 (
@@ -63,9 +55,7 @@ if errorlevel 1 (
 echo Commit created.
 echo [%date% %time%] Commit created. >> "%LOGFILE%"
 
-REM --------------------------------------------------
 REM Push with retry
-REM --------------------------------------------------
 set /a ATTEMPT=1
 
 :RETRY
@@ -80,17 +70,17 @@ if not errorlevel 1 (
     echo ==========================================
     echo SUCCESS - GitHub upload completed.
     echo ==========================================
+
     echo [%date% %time%] SUCCESS - GitHub upload completed. >> "%LOGFILE%"
 
-    REM --------------------------------------------------
-    REM Shutdown ONLY for scheduled run
-    REM --------------------------------------------------
+    REM Shutdown ONLY when /scheduled is used
     if "%SCHEDULED_RUN%"=="1" (
         echo.
         echo Upload successful.
         echo Laptop will shutdown in 60 seconds.
         echo Press CTRL+C to cancel shutdown.
-        echo [%date% %time%] Scheduled upload successful. Shutdown in 60 seconds. >> "%LOGFILE%"
+
+        echo [%date% %time%] Shutdown scheduled. >> "%LOGFILE%"
 
         shutdown /s /t 60 /c "GitHub automatic upload completed."
     )
@@ -99,20 +89,16 @@ if not errorlevel 1 (
 )
 
 echo Push failed. Internet may be unavailable.
-echo [%date% %time%] Push failed. Internet may be unavailable. >> "%LOGFILE%"
+echo [%date% %time%] Push failed. >> "%LOGFILE%"
 
 if !ATTEMPT! GEQ %MAX_RETRIES% (
     echo.
-    echo ==========================================
     echo FAILED - All retry attempts exhausted.
-    echo ==========================================
     echo [%date% %time%] FAILED - All retry attempts exhausted. >> "%LOGFILE%"
     exit /b 1
 )
 
 echo Waiting 5 minutes before retry...
-echo [%date% %time%] Waiting 5 minutes before retry. >> "%LOGFILE%"
-
 timeout /t %RETRY_DELAY% /nobreak >nul
 
 set /a ATTEMPT+=1
