@@ -1,0 +1,14 @@
+# Backup folders
+*_BACKUP/
+
+# Automation files
+auto_upload.bat
+auto_upload_backup.bat
+auto_upload.log
+
+# Temporary C backup files
+*_backup.c
+*_LOCAL_BACKUP.c
+
+# Temporary status file
+status.txt
