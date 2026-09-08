@@ -91,7 +91,7 @@ def main():
     log("Changes detected.")
 
     result = run_git(
-        ["commit", "-m", "Automatic daily update"]
+        ["commit", "-m", "Repository update "]
     )
 
     if result.returncode != 0:
