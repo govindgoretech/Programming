@@ -91,7 +91,7 @@ def main():
     log("Changes detected.")
 
     result = run_git(
-        ["commit", "-m", "Repository update "]
+        ["commit", "-m", "Add C string handling and pointer programs"]
     )
 
     if result.returncode != 0:
