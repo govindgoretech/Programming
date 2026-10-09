@@ -6,9 +6,9 @@ import subprocess
 from datetime import datetime
 from pathlib import Path
 
-# --------------------------------------------------
+# ----------------------------------------------------
 # Programming folder
-# --------------------------------------------------
+# ----------------------------------------------------
 PROJECT_DIR = Path(r"C:\Users\goreg\OneDrive\Desktop\Programming")
 LOG_FILE = PROJECT_DIR / "auto_upload.log"
 
@@ -45,7 +45,7 @@ def shutdown_laptop():
     """Schedule Windows shutdown after 60 seconds."""
     log("GitHub upload successful. Shutdown scheduled in 60 seconds.")
     subprocess.run(
-        ["shutdown", "/s", "/t", "60",
+        ["shutdown", "/s", "/t", "20",
          "/c", "GitHub automatic upload completed."]
     )
 
@@ -61,10 +61,10 @@ def main():
     # 0 to 30 minutes
     # --------------------------------------------------
     if scheduled:
-        random_minutes = random.randint(0, 30)
+        random_minutes = random.randint(0, 1)
         log(f"Scheduled run detected. Waiting {random_minutes} minutes.")
 
-        time.sleep(random_minutes * 60)
+        time.sleep(random_minutes * 30)
 
     # --------------------------------------------------
     # Git add
@@ -91,7 +91,7 @@ def main():
     log("Changes detected.")
 
     result = run_git(
-        ["commit", "-m", "Add C string handling and pointer programs"]
+        ["commit", "-m", "Repository update "]
     )
 
     if result.returncode != 0:
