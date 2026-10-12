@@ -91,7 +91,7 @@ def main():
     log("Changes detected.")
 
     result = run_git(
-        ["commit", "-m", "Repository update "]
+        ["commit", "-m", "Add Python Scripts for object-Oriented Programming "]
     )
 
     if result.returncode != 0:
